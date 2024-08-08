@@ -1,0 +1,61 @@
+:root {
+    --background-color: #120f13;
+    --text-color: #df7fff;
+    --text-color-darker: #704080;
+    --border-color: #9580ff;
+    --button-size: 100px;
+    --gap-size: 10px;
+}
+
+* {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    position: fixed;
+}
+
+button:hover {
+    cursor: pointer;
+    background-color: var(--text-color);
+    color: var(--background-color);
+}
+
+button:focus {
+    outline: none;
+}
+
+.round-border {
+    border: 2px solid var(--border-color);
+}
+
+.middle-text {
+    text-align: center;
+}
+
+.right-text {
+    text-align: right;
+}
+
+.text-padding {
+    padding-left: var(--gap-size);
+    padding-right: var(--gap-size);
+}
+
+.padding {
+    padding: var(--gap-size);
+}
+
+.no-bottom-border {
+    border-bottom: 0;
+}
+
+.no-top-border {
+    border-top: 0;
+}
+
+.no-left-border {
+    border-left: 0;
+}
+
+.no-right-border {
+    border-right: 0;
+}

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>calculator</title>
+    <style>
+        :root {
+            --background-color: #120f13;
+            --text-color: #df7fff;
+            --text-color-darker: #704080;
+            --border-color: #9580ff;
+            --button-size: 100px;
+            --gap-size: 10px;
+        }
+
+        * {
+            background-color: var(--background-color);
+            border: None;
+            color: var(--text-color);
+            text-align: center;
+            margin: none;
+        }
+
+        #root>nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+            padding: 0 40px;
+            border-bottom: 4px solid var(--border-color);
+        }
+
+        .navbar-left {
+            position: relative;
+            left: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        h2 {
+            width: 100px;
+        }
+
+        h1 {
+            width: 100%;
+            text-align: center;
+        }
+
+        button:hover {
+            cursor: pointer;
+            background-color: var(--text-color);
+            color: var(--background-color);
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        .small_font {
+            font-size: 1.6em;
+        }
+
+        #calculator {
+            position: relative;
+            top: var(--gap-size);
+            width: 450px;
+            display: grid;
+            grid-template-columns: repeat(4, var(--button-size));
+            grid-template-rows: repeat(7, var(--button-size));
+            grid-gap: var(--gap-size);
+        }
+
+        #calculator>* {
+            border: var(--border-color) 4px solid;
+            width: var(--button-size);
+
+            :not(#add) {
+                height: var(--button-size);
+            }
+
+            font-size: 40px;
+            margin: 0;
+        }
+
+        #output {
+            height: calc(var(--button-size) * 2 + --gap-size);
+            width: calc(var(--button-size) * 4 + --gap-size * 3);
+            grid-column: span 4;
+            grid-row: span 2;
+            text-align: right;
+            display: grid;
+            grid-template-columns: auto;
+        }
+
+        #output>a {
+            text-align: right;
+            position: relative;
+            right: var(--gap-size);
+        }
+
+        #output2 {
+            color: var(--text-color-darker);
+            font-size: 50px;
+        }
+
+        #maino {
+            bottom: 30px;
+            height: 140px !important;
+            overflow: hidden;
+            font-size: 100px;
+            text-overflow: clip;
+        }
+
+        #calculator {
+            margin: auto;
+        }
+    </style>
+    <script>
+        var symbol = "+-×÷";
+        var last = "";
+        function set_var(e) {
+            last = e;
+            globalThis.main_output = document.getElementById("maino");
+            globalThis.output2 = document.getElementById("output2");
+            globalThis.buttons = document.querySelectorAll("button");
+        }
+
+        function display_sign() {
+            set_var('+-');
+            let e = main_output.innerText
+            main_output.innerText = -e
+            if (main_output.innerText == 'NaN') {
+                main_output.innerText = e
+            }
+        }
+        function display(num) {
+            set_var(num);
+            if (main_output.innerText == "0" && num != ".") {
+                main_output.innerText = num;
+            } else {
+                if (!(main_output.innerText.split(".").length - 1 > 0 && num == ".")) {
+                    if (!symbol.includes(num)) {
+                        main_output.innerText += num;
+                    } else if (symbol.includes(main_output.innerText.slice(-1))) {
+                        main_output.innerText = main_output.innerText.slice(0, -1) + num;
+                    } else {
+                        main_output.innerText += num;
+                    }
+                }
+            }
+        }
+        function display_answer() {
+            set_var(last)
+            if (last != '=') {
+                let e = eval(main_output.innerText.replace("×", "*").replace("÷", "/"));
+                output2.innerText = main_output.innerText;
+                main_output.innerText = Math.round(eval(output2.innerText.replace("×", "*").replace("÷", "/")) * 10000) / 10000;
+            }
+            set_var('=');
+
+        }
+        function display_remove(count) {
+            set_var('del');
+            main_output.innerText = main_output.innerText.slice(0, -count);
+            if (main_output.innerText == "" || main_output.innerText == "undefined") {
+                main_output.innerText = "0";
+            }
+        }
+        function display_set(num) {
+            main_output.innerText = num;
+        }
+        function display_set2(num) {
+            output2.innerText = num;
+        }
+    </script>
+</head>
+
+<body>
+    <div id="root">
+        <nav class="navbar">
+            <nav class="navbar navbar-left">
+                <div class="navbar-brand">
+                    <h2>Calculator</h2>
+                </div>
+            </nav>
+        </nav>
+        <div id="main">
+            <div id="calculator">
+                <div id="output">
+                    <a id="output2">0</a>
+                    <a id="maino">0</a>
+                </div>
+                <button id="AC" onclick="display_set('0');display_set2('0')">AC</button>
+                <button id="C" onclick="display_set('0')">C</button>
+                <button id="del" onclick="display_remove(1)">⌫</button>
+                <button id="sign" onclick="display_sign()">+/-</button>
+                <button id="7" onclick="display('7')">7</button>
+                <button id="8" onclick="display('8')">8</button>
+                <button id="9" onclick="display('9')">9</button>
+                <button id="/" onclick="display('÷')">÷</button>
+                <button id="4" onclick="display('4')">4</button>
+                <button id="5" onclick="display('5')">5</button>
+                <button id="6" onclick="display('6')">6</button>
+                <button id="*" onclick="display('×')">×</button>
+                <button id="1" onclick="display('1')">1</button>
+                <button id="2" onclick="display('2')">2</button>
+                <button id="3" onclick="display('3')">3</button>
+                <button id="-" onclick="display('−')">-</button>
+                <button id="." onclick="display('.')">.</button>
+                <button id="0" onclick="display('0')">0</button>
+                <button id="=" onclick="display_answer()">=</button>
+                <button id="+" onclick="display('+')">+</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
